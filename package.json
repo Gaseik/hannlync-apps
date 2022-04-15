@@ -1,0 +1,48 @@
+{
+  "name": "hannlync-apps",
+  "version": "1.0.3",
+  "description": "test for hannlync apps component",
+  "main": "./lib/hannlyncApps.js",
+  "scripts": {
+    "build": "webpack",
+    "build:webpack": "webpack --config webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gaseik/npm-lab.git"
+  },
+  "keywords": [
+    "hannlync"
+  ],
+  "author": "gaseik",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Gaseik/npm-lab/issues"
+  },
+  "homepage": "https://github.com/Gaseik/npm-lab#readme",
+  "dependencies": {
+    "@babel/core": "^7.17.9",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/plugin-syntax-jsx": "^7.16.7",
+    "@babel/plugin-transform-react-jsx": "^7.17.3",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@babel/preset-stage-0": "^7.8.3",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/material": "^5.6.1",
+    "@mui/styles": "^5.6.1",
+    "@svgr/webpack": "^6.2.1",
+    "babel-loader": "^8.2.4",
+    "babel-preset-react": "^6.24.1",
+    "file-loader": "^6.2.0",
+    "react": "^18.0.0",
+    "react-icons": "^4.3.1",
+    "react-svg-loader": "^3.0.3",
+    "svg-react-loader": "^0.4.6",
+    "svg-sprite-loader": "^6.0.11",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
+  }
+}
