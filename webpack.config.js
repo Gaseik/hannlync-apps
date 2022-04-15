@@ -22,6 +22,7 @@ module.exports = {
     alias: {
       react: path.resolve(__dirname, "./node_modules/react"),
       "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
+      "@mui/material/core": "@mui/material/core/es"
     },
   },
   externals: {

@@ -1,8 +1,9 @@
+import { contents_url, epg_url } from "./api.js";
 
-import React, { useState } from "react";
-import { css } from "@emotion/react";
 import { makeStyles } from "@mui/styles";
-import { Grid, Tooltip, Collapse } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
+import Collapse from "@mui/material/Collapse";
+import { Grid } from "@mui/material";
 
 import { IoBriefcaseOutline } from "react-icons/io5";
 import { CgMenuGridO } from "react-icons/cg";
@@ -11,8 +12,9 @@ import { CgMenuGridO } from "react-icons/cg";
 // import Meta from "./img/svg/Meta.jsx";
 // import Contents from "./img/svg/Content.jsx";
 // import EPG from "./img/svg/EPG.jsx";
-const ServesStyles = () => ({
-  icon: css({
+
+const ServesStyles = makeStyles({
+  icon: {
     cursor: "pointer",
     fontSize: 20,
     display: "flex",
@@ -21,14 +23,14 @@ const ServesStyles = () => ({
     height: "40px",
     margin: "0 1rem",
     transition: "all .2s ease-in-out",
-  }),
-  container: css({
+  },
+  container: {
     position: "absolute",
     top: 55,
     // transition: "all .3s ease-in-out",
     right: 40,
-  }),
-  pannel: css({
+  },
+  pannel: {
     padding: "2rem",
     boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.25)",
     // width: "100%",
@@ -46,8 +48,8 @@ const ServesStyles = () => ({
     color: "#fff",
     fontSize: 12,
     position: "relative",
-  }),
-  ser: css({
+  },
+  ser: {
     // border: "1px solid #000",
     width: "100%",
     height: "170px",
@@ -68,8 +70,8 @@ const ServesStyles = () => ({
       opacity: 0.7,
       transition: "all 0.3s ease-in-out",
     },
-  }),
-  disSer: css({
+  },
+  disSer: {
     borderRadius: "8px",
     width: "100%",
     height: "170px",
@@ -80,46 +82,103 @@ const ServesStyles = () => ({
     cursor: "",
     color: "#5e5e5e",
     transition: "all .3s ease-in-out",
-  }),
-  disicon: css({
+  },
+  disicon: {
     "& path": {
       fill: "#5e5e5e",
     },
-  }),
-  sicon: css({
+  },
+  sicon: {
     fontSize: 40,
     marginBottom: ".5rem",
-  }),
+  },
 });
 
-function Serves({ open, handle }) {
-  // const classes = ServesStyles();
-  // const [openss, setss] = useState(false);
+export default function Serves({ open, set, color, navbar }) {
+  const classes = ServesStyles();
+  // const [open,set] = useState(false)
+  const serves = [
+    {
+      name: "EPG",
+      icon: EPG,
+      disable: false,
+      url: epg_url,
+    },
+    {
+      name: "Contents",
+      icon: Contents,
+      disable: false,
+      url: contents_url,
+    },
+    {
+      name: "Public Metaverse",
+      icon: Meta,
+      disable: true,
+    },
 
+    {
+      name: "Maneged Serves",
+      icon: IoBriefcaseOutline,
+      disable: true,
+    },
+    {
+      name: "Mercury",
+      icon: Mercury,
+      disable: true,
+    },
+  ];
+  const handle = (e) => {
+    e.stopPropagation();
+    if (open === "serves") {
+      set(false);
+    } else {
+      set("serves");
+    }
+  };
 
-  const classes = ServesStyles;
   return (
     <div>
       <Tooltip title="Hannlync Apps">
-      <div css={classes.icon}>
-        <CgMenuGridO
-          fontSize={24}
-          // color={color && !navbar ? "#000" : "#fff"}
-          // onClick={handle}
-        />
-      </div>
+        <div className={classes.icon}>
+          <CgMenuGridO
+            fontSize={24}
+            color={color && !navbar ? "#000" : "#fff"}
+            onClick={handle}
+          />
+        </div>
       </Tooltip>
-      <div css={classes.container}>
-        <Collapse in={open?open:true}>
+      <div className={classes.container}>
+        <Collapse in={open === "serves"}>
           <div
-            css={classes.pannel}
+            className={classes.pannel}
             onClick={(e) => {
               e.stopPropagation();
               set("serves");
             }}
           >
             <Grid container spacing={3}>
-              
+              {serves.map((s) => (
+                <Grid item xs={6} key={s.name}>
+                  {s.disable ? (
+                    <div className={classes.disSer}>
+                      <div className={`${classes.sicon} ${classes.disicon}`}>
+                        {" "}
+                        <s.icon fill="#5e5e5e" />
+                      </div>
+
+                      <div className={classes.title}>{s.name}</div>
+                    </div>
+                  ) : (
+                    <a className={classes.ser} href={'https://epg.dev.hannlync.com'}>
+                      <div className={classes.sicon}>
+                        {" "}
+                        <s.icon />
+                      </div>
+                      <div className={classes.title}>{s.name}</div>
+                    </a>
+                  )}
+                </Grid>
+              ))}
             </Grid>
           </div>
         </Collapse>
@@ -127,8 +186,6 @@ function Serves({ open, handle }) {
     </div>
   );
 }
-
-export default Serves;
 
 const Meta = (props) => {
   return (
@@ -147,7 +204,7 @@ const Meta = (props) => {
   );
 };
 
-const Mercury = (props) => {
+const mercury = (props) => {
   return (
     <svg
       width={50}
@@ -173,22 +230,20 @@ const Mercury = (props) => {
   );
 };
 
-const EPG = (props) => {
-  return (
-    <svg
-      width={40}
-      height={30}
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        d="M33.8 0h-28C2.6 0 0 2.585 0 5.77v18.46C0 27.416 2.599 30 5.8 30h28c3.201 0 5.8-2.585 5.8-5.77V5.77C39.6 2.584 36.993 0 33.8 0Zm-7.588 15.977-9.282 5.77a1.145 1.145 0 0 1-1.176.03 1.145 1.145 0 0 1-.595-1.008V9.231c0-.423.232-.808.596-1.008.371-.2.82-.192 1.175.03l9.282 5.77c.34.208.541.577.541.977s-.2.761-.541.977Z"
-        fill="#fff"
-      />
-    </svg>
-  );
-};
+const EPG = (props) => {return(
+  <svg
+    width={40}
+    height={30}
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      d="M33.8 0h-28C2.6 0 0 2.585 0 5.77v18.46C0 27.416 2.599 30 5.8 30h28c3.201 0 5.8-2.585 5.8-5.77V5.77C39.6 2.584 36.993 0 33.8 0Zm-7.588 15.977-9.282 5.77a1.145 1.145 0 0 1-1.176.03 1.145 1.145 0 0 1-.595-1.008V9.231c0-.423.232-.808.596-1.008.371-.2.82-.192 1.175.03l9.282 5.77c.34.208.541.577.541.977s-.2.761-.541.977Z"
+      fill="#fff"
+    />
+  </svg>
+)}
 
 const Contents = (props) => {
   return (

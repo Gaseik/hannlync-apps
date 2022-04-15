@@ -2,12 +2,14 @@
 /node_modules
 /.pnp
 .pnp.js
+.tgz
 
 # testing
 /coverage
 
 # production
 /build
+.vscode
 
 # .publish cache
 .publish
@@ -18,6 +20,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+*.tgz
 
 npm-debug.log*
 yarn-debug.log*
