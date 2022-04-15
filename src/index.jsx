@@ -1,4 +1,5 @@
-
+// this comment tells babel to convert jsx to calls to a function called jsx instead of React.createElement
+/** @jsx jsx */
 import React, { useState } from "react";
 import { css } from "@emotion/react";
 import { makeStyles } from "@mui/styles";
@@ -110,7 +111,7 @@ function Serves({ open, handle }) {
       </div>
       </Tooltip>
       <div css={classes.container}>
-        <Collapse in={open?open:true}>
+        {/* <Collapse in={open?open:true}> */}
           <div
             css={classes.pannel}
             onClick={(e) => {
@@ -122,7 +123,7 @@ function Serves({ open, handle }) {
               
             </Grid>
           </div>
-        </Collapse>
+        {/* </Collapse> */}
       </div>
     </div>
   );
