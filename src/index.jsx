@@ -1,5 +1,6 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { css } from "@emotion/react";
+import { color } from "./style.jsx";
 // import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Tooltip, Collapse } from "@mui/material";
 // import {Collapse} from '@material-ui/core';
@@ -8,8 +9,6 @@ import { contents_url, epg_url } from "./api.js";
 
 import { IoBriefcaseOutline } from "react-icons/io5";
 import { CgMenuGridO } from "react-icons/cg";
-import  './scss/style.scss'
-
 
 const ServesStyles = makeStyles({
   icon: {
@@ -31,17 +30,11 @@ const ServesStyles = makeStyles({
   pannel: {
     padding: "2rem",
     boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.25)",
-    // width: "100%",
     width: "300px",
     overflow: "hidden",
     minHeight: "360px",
-    // height:'100%',
-    // backgroundColor: "#fff",
     borderRadius: "4px",
-    background: "#2F2F2F",
-    // opacity: (props) => (props.open ? 1 : 1),
-    // zIndex: (props) => (props.open ? 1 : 1),
-    // pointerEvents: (props) => (props.open ? "" : "none"),
+    background: (props) => (props.color ? color.black : color.white),
     display: "flex",
     color: "#fff",
     fontSize: 12,
@@ -52,17 +45,21 @@ const ServesStyles = makeStyles({
     width: "100%",
     height: "170px",
     borderRadius: "8px",
-    color: "#fff",
+    color: props=>props.color?"#fff":"#858585",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    alignItems: "center",
     textDecoration: "none",
-    background:
-      "linear-gradient(220.1deg, rgba(255, 255, 255, 0.04) 3.99%, rgba(255, 255, 255, 0.056) 115.92%)",
+    background: (props) =>
+      props.color
+        ? "linear-gradient(220.1deg, rgba(255, 255, 255, 0.04) 3.99%, rgba(255, 255, 255, 0.056) 115.92%)"
+        : "linear-gradient(220.1deg, rgba(60, 60, 60, 0.04) 3.99%, rgba(0, 0, 0, 0.056) 115.92%)",
     fontSize: 14,
     cursor: "pointer",
     "& path": {
-      stroke: "#fff",
+      stroke: (props) => (props.color ? "#fff" : "#858585"),
+      fill: (props) => (props.color ? "#fff" : "#858585"),
     },
     "&:hover": {
       opacity: 0.7,
@@ -74,6 +71,7 @@ const ServesStyles = makeStyles({
     width: "100%",
     height: "170px",
     display: "flex",
+    alignItems: "center",
     flexDirection: "column",
     justifyContent: "center",
     fontSize: 14,
@@ -173,20 +171,20 @@ const ServesStyles = makeStyles({
 //   }),
 // });
 
-function Serves({ open, handle,color,navbar }) {
+function Serves({ open, set, color, navbar }) {
   // const [openss, setss] = useState(false);
 
-  const [serves,setServers] = React.useState([
+  const [serves, setServers] = React.useState([
     {
       name: "EPG",
       icon: EPG,
-      id:'epg',
+      id: "epg",
       disable: false,
       url: epg_url,
     },
     {
       name: "Contents",
-      id:'contents',
+      id: "contents",
       icon: Contents,
       disable: false,
       url: contents_url,
@@ -208,44 +206,46 @@ function Serves({ open, handle,color,navbar }) {
       disable: true,
     },
   ]);
-  const classes = ServesStyles();
+  const classes = ServesStyles({ color: color });
 
-  React.useEffect(()=>{
-    
-   serves.forEach((s,index)=>{
-    if(window.location.hostname.includes(s.id)){
-     
-      setServers(serves.filter((se)=>se.id!==s.id))
+  React.useEffect(() => {
+    serves.forEach((s, index) => {
+      if (window.location.hostname.includes(s.id)) {
+        setServers(serves.filter((se) => se.id !== s.id));
+      }
+    });
+  }, []);
+  const handle = (e) => {
+    e.stopPropagation();
+    if (open === "servers") {
+      set(false);
+    } else {
+      set("servers");
     }
-   })
-  },[])
-
-
-
+  };
 
   return (
     <div>
       <Tooltip title="Hannlync Apps">
-      <div className={classes.icon}>
-        <CgMenuGridO
-          fontSize={24}
-          color={color && !navbar ? "#000" : "#fff"}
-          onClick={handle}
-        />
-      </div>
+        <div className={classes.icon}>
+          <CgMenuGridO
+            fontSize={24}
+            color={!color ? "#000" : "#fff"}
+            onClick={handle}
+          />
+        </div>
       </Tooltip>
       <div className={classes.container}>
-        <Collapse in={open}>
-        {/* {open ? ( */}
+        <Collapse in={open === "servers"}>
+          {/* {open ? ( */}
           <div
             className={classes.pannel}
             onClick={(e) => {
               e.stopPropagation();
               set("serves");
             }}
-            
           >
-              <Grid container spacing={3}>
+            <Grid container spacing={3}>
               {serves.map((s) => (
                 <Grid item xs={6} key={s.name}>
                   {s.disable ? (
@@ -258,7 +258,10 @@ function Serves({ open, handle,color,navbar }) {
                       <div className={classes.title}>{s.name}</div>
                     </div>
                   ) : (
-                    <a className={classes.ser} href={'https://epg.dev.hannlync.com'}>
+                    <a
+                      className={classes.ser}
+                      href={"https://epg.dev.hannlync.com"}
+                    >
                       <div className={classes.sicon}>
                         {" "}
                         <s.icon />
@@ -270,7 +273,7 @@ function Serves({ open, handle,color,navbar }) {
               ))}
             </Grid>
           </div>
-        {/* ) : null} */}
+          {/* ) : null} */}
         </Collapse>
       </div>
     </div>
