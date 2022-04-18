@@ -2,16 +2,20 @@
   "presets": ["@babel/preset-env", "@babel/preset-react"],
   "plugins": [
     "@emotion",
-    "@babel/plugin-syntax-jsx",
+    // "@babel/plugin-syntax-jsx",
     "@babel/plugin-transform-react-jsx",
     [
-      "babel-plugin-import",
+      "babel-plugin-transform-imports",
       {
-        "libraryName": "@material-ui/core",
-        "libraryDirectory": "",
-        "camel2DashComponentName": false
-      },
-      "core"
+        "@material-ui/core": {
+          "transform": "@material-ui/core/${member}",
+          "preventFullImport": true
+        },
+        "@material-ui/icons": {
+          "transform": "@material-ui/icons/${member}",
+          "preventFullImport": true
+        }
+      }
     ]
   ]
 }

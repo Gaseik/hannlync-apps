@@ -1,19 +1,18 @@
-// this comment tells babel to convert jsx to calls to a function called jsx instead of React.createElement
-/** @jsx jsx */
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { css } from "@emotion/react";
-import { makeStyles } from "@mui/styles";
+// import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Tooltip, Collapse } from "@mui/material";
+// import {Collapse} from '@material-ui/core';
+import { makeStyles } from "@mui/styles";
+import { contents_url, epg_url } from "./api.js";
 
 import { IoBriefcaseOutline } from "react-icons/io5";
 import { CgMenuGridO } from "react-icons/cg";
+import  './scss/style.scss'
 
-// import Mercury from "./img/svg/mercury.jsx";
-// import Meta from "./img/svg/Meta.jsx";
-// import Contents from "./img/svg/Content.jsx";
-// import EPG from "./img/svg/EPG.jsx";
-const ServesStyles = () => ({
-  icon: css({
+
+const ServesStyles = makeStyles({
+  icon: {
     cursor: "pointer",
     fontSize: 20,
     display: "flex",
@@ -22,14 +21,14 @@ const ServesStyles = () => ({
     height: "40px",
     margin: "0 1rem",
     transition: "all .2s ease-in-out",
-  }),
-  container: css({
+  },
+  container: {
     position: "absolute",
     top: 55,
     // transition: "all .3s ease-in-out",
     right: 40,
-  }),
-  pannel: css({
+  },
+  pannel: {
     padding: "2rem",
     boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.25)",
     // width: "100%",
@@ -47,8 +46,8 @@ const ServesStyles = () => ({
     color: "#fff",
     fontSize: 12,
     position: "relative",
-  }),
-  ser: css({
+  },
+  ser: {
     // border: "1px solid #000",
     width: "100%",
     height: "170px",
@@ -69,8 +68,8 @@ const ServesStyles = () => ({
       opacity: 0.7,
       transition: "all 0.3s ease-in-out",
     },
-  }),
-  disSer: css({
+  },
+  disSer: {
     borderRadius: "8px",
     width: "100%",
     height: "170px",
@@ -81,49 +80,198 @@ const ServesStyles = () => ({
     cursor: "",
     color: "#5e5e5e",
     transition: "all .3s ease-in-out",
-  }),
-  disicon: css({
+  },
+  disicon: {
     "& path": {
       fill: "#5e5e5e",
     },
-  }),
-  sicon: css({
+  },
+  sicon: {
     fontSize: 40,
     marginBottom: ".5rem",
-  }),
+  },
 });
 
-function Serves({ open, handle }) {
-  // const classes = ServesStyles();
+// const ServesStyles = () => ({
+//   icon: css({
+//     cursor: "pointer",
+//     fontSize: 20,
+//     display: "flex",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     height: "40px",
+//     margin: "0 1rem",
+//     transition: "all .2s ease-in-out",
+//   }),
+//   container: css({
+//     position: "absolute",
+//     top: 55,
+//     // transition: "all .3s ease-in-out",
+//     right: 40,
+//   }),
+//   pannel: css({
+//     padding: "2rem",
+//     boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.25)",
+//     // width: "100%",
+//     width: "300px",
+//     overflow: "hidden",
+//     minHeight: "360px",
+//     // height:'100%',
+//     // backgroundColor: "#fff",
+//     borderRadius: "4px",
+//     background: "#2F2F2F",
+//     // opacity: (props) => (props.open ? 1 : 1),
+//     // zIndex: (props) => (props.open ? 1 : 1),
+//     // pointerEvents: (props) => (props.open ? "" : "none"),
+//     display: "flex",
+//     color: "#fff",
+//     fontSize: 12,
+//     position: "relative",
+//   }),
+//   ser: css({
+//     // border: "1px solid #000",
+//     width: "100%",
+//     height: "170px",
+//     borderRadius: "8px",
+//     color: "#fff",
+//     display: "flex",
+//     flexDirection: "column",
+//     justifyContent: "center",
+//     textDecoration: "none",
+//     background:
+//       "linear-gradient(220.1deg, rgba(255, 255, 255, 0.04) 3.99%, rgba(255, 255, 255, 0.056) 115.92%)",
+//     fontSize: 14,
+//     cursor: "pointer",
+//     "& path": {
+//       stroke: "#fff",
+//     },
+//     "&:hover": {
+//       opacity: 0.7,
+//       transition: "all 0.3s ease-in-out",
+//     },
+//   }),
+//   disSer: css({
+//     borderRadius: "8px",
+//     width: "100%",
+//     height: "170px",
+//     display: "flex",
+//     flexDirection: "column",
+//     justifyContent: "center",
+//     fontSize: 14,
+//     cursor: "",
+//     color: "#5e5e5e",
+//     transition: "all .3s ease-in-out",
+//   }),
+//   disicon: css({
+//     "& path": {
+//       fill: "#5e5e5e",
+//     },
+//   }),
+//   sicon: css({
+//     fontSize: 40,
+//     marginBottom: ".5rem",
+//   }),
+// });
+
+function Serves({ open, handle,color,navbar }) {
   // const [openss, setss] = useState(false);
 
+  const [serves,setServers] = React.useState([
+    {
+      name: "EPG",
+      icon: EPG,
+      id:'epg',
+      disable: false,
+      url: epg_url,
+    },
+    {
+      name: "Contents",
+      id:'contents',
+      icon: Contents,
+      disable: false,
+      url: contents_url,
+    },
+    {
+      name: "Public Metaverse",
+      icon: Meta,
+      disable: true,
+    },
 
-  const classes = ServesStyles;
+    {
+      name: "Maneged Serves",
+      icon: IoBriefcaseOutline,
+      disable: true,
+    },
+    {
+      name: "Mercury",
+      icon: Mercury,
+      disable: true,
+    },
+  ]);
+  const classes = ServesStyles();
+
+  React.useEffect(()=>{
+    
+   serves.forEach((s,index)=>{
+    if(window.location.hostname.includes(s.id)){
+     
+      setServers(serves.filter((se)=>se.id!==s.id))
+    }
+   })
+  },[])
+
+
+
+
   return (
     <div>
       <Tooltip title="Hannlync Apps">
-      <div css={classes.icon}>
+      <div className={classes.icon}>
         <CgMenuGridO
           fontSize={24}
-          // color={color && !navbar ? "#000" : "#fff"}
-          // onClick={handle}
+          color={color && !navbar ? "#000" : "#fff"}
+          onClick={handle}
         />
       </div>
       </Tooltip>
-      <div css={classes.container}>
-        {/* <Collapse in={open?open:true}> */}
+      <div className={classes.container}>
+        <Collapse in={open}>
+        {/* {open ? ( */}
           <div
-            css={classes.pannel}
+            className={classes.pannel}
             onClick={(e) => {
               e.stopPropagation();
               set("serves");
             }}
+            
           >
-            <Grid container spacing={3}>
-              
+              <Grid container spacing={3}>
+              {serves.map((s) => (
+                <Grid item xs={6} key={s.name}>
+                  {s.disable ? (
+                    <div className={classes.disSer}>
+                      <div className={`${classes.sicon} ${classes.disicon}`}>
+                        {" "}
+                        <s.icon fill="#5e5e5e" />
+                      </div>
+
+                      <div className={classes.title}>{s.name}</div>
+                    </div>
+                  ) : (
+                    <a className={classes.ser} href={'https://epg.dev.hannlync.com'}>
+                      <div className={classes.sicon}>
+                        {" "}
+                        <s.icon />
+                      </div>
+                      <div className={classes.title}>{s.name}</div>
+                    </a>
+                  )}
+                </Grid>
+              ))}
             </Grid>
           </div>
-        {/* </Collapse> */}
+        {/* ) : null} */}
+        </Collapse>
       </div>
     </div>
   );

@@ -1,4 +1,6 @@
 const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require("webpack");
 
 module.exports = {
   mode: "production",
@@ -11,6 +13,10 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.(s(a|c)ss)$/,
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
+      {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         loader: "babel-loader",
@@ -18,26 +24,25 @@ module.exports = {
       },
     ],
   },
+
   resolve: {
     alias: {
       react: path.resolve(__dirname, "./node_modules/react"),
       "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
-      "@mui/material/core": "@mui/material/core/es"
+      "@mui/base": "@mui/base/legacy",
+      "@mui/lab": "@mui/lab/legacy",
+      "@mui/material": "@mui/material/legacy",
+      "@mui/styled-engine": "@mui/styled-engine/legacy",
+      "@mui/system": "@mui/system/legacy",
     },
   },
+  plugins: [
+    new MiniCssExtractPlugin(),
+  ],
   externals: {
-    // Don't bundle react or react-dom
-    react: {
-      commonjs: "react",
-      commonjs2: "react",
-      amd: "React",
-      root: "React",
-    },
-    "react-dom": {
-      commonjs: "react-dom",
-      commonjs2: "react-dom",
-      amd: "ReactDOM",
-      root: "ReactDOM",
-    },
-  },
+    react: 'react',
+    reactDOM: 'react-dom',
+    "@mui/material":'@mui/material',
+    "@mui/styles":"@mui/styles"
+  }
 };
